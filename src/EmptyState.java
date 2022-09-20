@@ -2,11 +2,11 @@
  *
  * @author yaw
  */
-public class NoQuarterState implements State{
-    
+public class EmptyState implements State{
+
     private GumballMachine gumballMachine;
-    
-    public NoQuarterState(GumballMachine m) {
+
+    public EmptyState(GumballMachine m) {
         gumballMachine = m;
     }
 
@@ -28,6 +28,7 @@ public class NoQuarterState implements State{
 
     @Override
     public void refill() {
-        System.out.println("It's not empty yet");
+        System.out.println("Refilled gumball reservoir");
+        gumballMachine.setState(gumballMachine.getNoQuarterState());
     }
 }

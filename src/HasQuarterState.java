@@ -27,4 +27,9 @@ public class HasQuarterState implements State {
         gumballMachine.setState(gumballMachine.getNoQuarterState());
         //Above was set to getHasQuarterState() which was incorrect
     }
+
+    @Override
+    public void refill() {
+        System.out.println("It's not empty yet");
+    }
 }
