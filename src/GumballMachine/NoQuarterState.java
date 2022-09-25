@@ -1,8 +1,12 @@
+package GumballMachine;
+
+import GumballMachine.GumballMachine;
+
 /**
  *
  * @author yaw
  */
-public class NoQuarterState implements State{
+public class NoQuarterState implements State {
     
     private GumballMachine gumballMachine;
     

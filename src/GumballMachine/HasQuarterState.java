@@ -1,3 +1,7 @@
+package GumballMachine;
+
+import GumballMachine.GumballMachine;
+
 /**
  *
  * @author yaw
@@ -25,7 +29,7 @@ public class HasQuarterState implements State {
     public void turnCrank() {
         if (gumballMachine.gumballsLeft > 0) {
             gumballMachine.gumballsLeft = gumballMachine.gumballsLeft - 1;
-            System.out.println("Gumball Delivered!" + gumballMachine.gumballsLeft);
+            System.out.println("Gumball Delivered!" + "About this many left --> " + gumballMachine.gumballsLeft);
             gumballMachine.setState(gumballMachine.getNoQuarterState());
         } else {
             System.out.println("No gumballs left");
