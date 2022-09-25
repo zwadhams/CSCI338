@@ -10,6 +10,9 @@ public class GumballMachine {
     
     //current state the machine is in
     private State currentState;
+
+    //Initializes how many gumballs there are
+    public Integer gumballsLeft = 5;
     
     public GumballMachine() {
         //initialize possible state instance variables
@@ -34,7 +37,7 @@ public class GumballMachine {
     }
 
     public State emptyState() {
-        return emptyState();
+        return emptyState;
     }
     
     public void insertQuarter() {

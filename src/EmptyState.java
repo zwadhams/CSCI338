@@ -2,7 +2,7 @@
  *
  * @author yaw
  */
-public class EmptyState implements State{
+public class EmptyState implements State {
 
     private GumballMachine gumballMachine;
 
@@ -11,9 +11,7 @@ public class EmptyState implements State{
     }
 
     @Override
-    public void insertQuarter() {
-        System.out.println("Quarter inserted");
-        gumballMachine.setState(gumballMachine.getHasQuarterState());
+    public void insertQuarter() { System.out.println("There's already a quarter in there");
     }
 
     @Override
@@ -23,12 +21,13 @@ public class EmptyState implements State{
 
     @Override
     public void turnCrank() {
-        System.out.println("Nothing happening, bro");
+        System.out.println("It's empty");
     }
 
     @Override
-    public void refill() {
+    public void refill() { //function to refill the gumball reservoir
+        gumballMachine.gumballsLeft = 5;
         System.out.println("Refilled gumball reservoir");
-        gumballMachine.setState(gumballMachine.getNoQuarterState());
+        gumballMachine.setState(gumballMachine.getHasQuarterState());
     }
 }

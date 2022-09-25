@@ -16,6 +16,17 @@ public class Driver {
         gumballMachine.turnCrank();
         gumballMachine.insertQuarter();
         gumballMachine.turnCrank();
+        gumballMachine.insertQuarter();
         gumballMachine.turnCrank();
+        gumballMachine.insertQuarter();
+        gumballMachine.turnCrank();
+        gumballMachine.insertQuarter();
+        gumballMachine.turnCrank();
+        gumballMachine.insertQuarter();
+        gumballMachine.turnCrank();
+        gumballMachine.refill();
+        gumballMachine.insertQuarter();
+        gumballMachine.turnCrank();
+
     }
 }
