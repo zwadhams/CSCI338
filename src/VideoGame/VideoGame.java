@@ -34,5 +34,22 @@ public class VideoGame {
         this.currentState = state;
     }
 
+    //STATES
+    public VideoGameState getStandingState() {return standingState;}
+
+    public VideoGameState getRunningState() {return runningState;}
+
+    public VideoGameState getJumpingState() {return jumpingState;}
+
+    public VideoGameState getDeadState() {return deadState;}
+
+    //TRANSITIONS
+    public void pressR() { currentState.pressR(); }
+
+    public void pressUp() { currentState.pressUp(); }
+
+    public void reset() { currentState.reset(); }
+
+    public void fireball() { currentState.fireball(); }
 
 }
