@@ -1,3 +1,8 @@
+package Project2;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -36,7 +41,37 @@ public class RegularExpression {
 
     // TODO: Complete this method so that it returns the nfa that only accepts the character c.
     private NFA singleCharNFA(char c) {
-        return null;
+        // NFA creation example.
+        //String[] states = new String[] {"S1", "S2", "S3", "S4"};
+        //char[] alphabet = new char[] {'0', '1'};
+
+        // Create HashMap of all transitions in NFA.
+        //HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>();
+
+        // Create all transitions from S1 with character 0. (There is only one - to S2)
+        //HashMap<Character, HashSet<String>> transition = new HashMap<>();
+        //transition.put('0', new HashSet<>(Arrays.asList("S2")));
+        //transitions.put("S1", transition);
+
+        String[] states = {"S1", "S2"};
+        char[] alphabet = new char[] {'0', '1'};
+
+        HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>(); //starting state, what numbers (1,0_),m ending states
+        HashMap<Character, HashSet<String>> transition = new HashMap<>();
+        if (c == '0') {
+            transition.put('0', new HashSet<>(Arrays.asList("S2")));
+            transitions.put("S1", transition);
+        } else if (c == '1') {
+            transition.put('1', new HashSet<>(Arrays.asList("S2")));
+            transitions.put("S1", transition);
+        }
+
+        String startState = "S1";
+        String[] acceptStates = {"S2"};
+
+        NFA nfa1 = new NFA(states, alphabet, transitions, startState, acceptStates);
+
+        return nfa1;
     }
 
     // You are not allowed to change this method's header at all.
