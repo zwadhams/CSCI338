@@ -26,17 +26,55 @@ public class RegularExpression {
 
     // TODO: Complete this method so that it returns the nfa resulting from concatenating the two input nfas.
     private NFA concatenate(NFA nfa1, NFA nfa2) {
+        //String[] resultingStates = new String[nfa1.getStates().length + nfa2.getStates().length];
+        //System.arraycopy(nfa1.getStates(), 0, resultingStates, 0, nfa1.getStates().length);
+        //System.out.println(nfa1.getStates());
+        //System.out.println(resultingStates);
+        //nfa1.getStartState();
+        //NFA resultingNfa = new NFA();
         return null;
     }
 
     // TODO: Complete this method so that it returns the nfa resulting from "staring" the input nfa.
     private NFA star(NFA nfa) {
-        return null;
+        //getting stuff from input nfa
+        String[] states = nfa.getStates(); //shouldn't be affected
+        char[] alphabet = nfa.getAlphabet(); //shouldn't be affected
+
+        HashMap<String, HashMap<Character, HashSet<String>>> transitions = nfa.getTransitions();
+
+        String startState = nfa.getStartState(); //shouldn't be affected
+        //adds the start state to the accept states
+        String[] acceptStates = new String[nfa.getAcceptStates().length + 1];
+        acceptStates = nfa.getAcceptStates();
+        acceptStates[-1] = startState;
+
+
+        NFA resultingNfa = new NFA(states, alphabet, transitions, startState, acceptStates);
+        return resultingNfa;
     }
 
     // TODO: Complete this method so that it returns the nfa resulting from "plussing" the input nfa.
     private NFA plus(NFA nfa) {
-        return null;
+        //getting stuff from input nfa
+        String[] states = nfa.getStates();
+        char[] alphabet = nfa.getAlphabet(); //shouldn't be affected
+
+        HashMap<String, HashMap<Character, HashSet<String>>> transitions = nfa.getTransitions();
+
+        String startState = nfa.getStartState(); //shouldn't be affected
+        //adds the start state to the accept states
+        String[] acceptStates = new String[nfa.getAcceptStates().length + 1];
+        acceptStates = nfa.getAcceptStates();
+        //acceptStates[-1] = startState;
+
+        //working on plussing it
+
+
+        //NFA nfa1 = new NFA(states, alphabet, transitions, startState, acceptStates);
+        //System.out.println(nfa);
+        NFA resultingNfa = new NFA(states, alphabet, transitions, startState, acceptStates);
+        return resultingNfa;
     }
 
     // TODO: Complete this method so that it returns the nfa that only accepts the character c.

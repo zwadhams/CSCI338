@@ -12,9 +12,9 @@ import java.util.HashSet;
 public class Proj2 {
 
     public static void main(String[] args) {
-        RegularExpression re = new RegularExpression("1");//(10)*101(00U11)+
+        RegularExpression re = new RegularExpression("01");//(10)*101(00U11)+
         System.out.println("Our tests: ");
-        System.out.println(re.test("0")); // True. 10101010011
+        System.out.println(re.test("01")); // True. 10101010011
         System.out.println(re.test("1"));  // False. 1010010011
 
         
