@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
+
 /**
  *
  * @author yaw
@@ -51,6 +52,7 @@ public class RegularExpression {
         String[] acceptStates = nfa2.getAcceptStates(); //definitely something needs to be done
 
 
+
         //transitions go here
         HashMap<String, HashMap<Character, HashSet<String>>> nfa1Transitions = nfa1.getTransitions();
         HashMap<String, HashMap<Character, HashSet<String>>> nfa2Transitions = nfa2.getTransitions();
@@ -62,9 +64,14 @@ public class RegularExpression {
 
         HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>();
 
+        //OVERRIDING TRANSITIONS------------------------------------------------------------
+        //dont put into a hash map unless it doenst have that element there CHECK IT FIRST
+        System.out.println(Arrays.toString(states));//!!!!!!!!!!!
+        //.containsKey() returns true transitions.get(p0)
         HashMap<Character, HashSet<String>> transition = new HashMap<>();
         //something like this
         for (int i = 0; i < nfa1.getStates().length; i++) {
+            //if (nfa1Transitions.get())
             transition.put('0', new HashSet<>(Arrays.asList("S2"))); //nfa1Transitions.get("S1").get('0')
             transitions.put(("S" + (i+1)), transition);
         }
