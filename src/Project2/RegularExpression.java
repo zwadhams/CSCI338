@@ -26,12 +26,44 @@ public class RegularExpression {
 
     // TODO: Complete this method so that it returns the nfa resulting from concatenating the two input nfas.
     private NFA concatenate(NFA nfa1, NFA nfa2) {
-        //String[] resultingStates = new String[nfa1.getStates().length + nfa2.getStates().length];
-        //System.arraycopy(nfa1.getStates(), 0, resultingStates, 0, nfa1.getStates().length);
-        //System.out.println(nfa1.getStates());
-        //System.out.println(resultingStates);
-        //nfa1.getStartState();
-        //NFA resultingNfa = new NFA();
+        // NFA creation example.
+        //String[] states = new String[] {"S1", "S2", "S3", "S4"};
+        //char[] alphabet = new char[] {'0', '1'};
+
+        // Create HashMap of all transitions in NFA.
+        //HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>();
+
+        HashMap<String, HashMap<Character, HashSet<String>>> nfa1Transitions = nfa1.getTransitions();
+        HashMap<String, HashMap<Character, HashSet<String>>> nfa2Transitions = nfa2.getTransitions();
+
+        //make transition from accept states of nfa1 to start state of nfa2
+        //but with what alphabet characters?
+
+        // Create all transitions from S1 with character 0. (There is only one - to S2)
+        //HashMap<Character, HashSet<String>> transition = new HashMap<>();
+        //transition.put('0', new HashSet<>(Arrays.asList("S2")));
+        //transitions.put("S1", transition);
+
+        //work begins here
+        String[] states = new String[nfa1.getStates().length + nfa2.getStates().length];
+        int numStates = states.length;
+        for (int i = 0; i < numStates; i++) {
+            states[i] = "S" + (i+1);
+        }
+
+        char[] alphabet = {'0', '1'}; //should stay the same??
+        //maybe needed below??
+        //char[] alphabet = Chars.concat(nfa1.getAlphabet(), nfa2.getAlphabet());
+
+        //transitions go here
+        HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>();
+        HashMap<Character, HashSet<String>> transition = new HashMap<>();
+
+        String startingState = nfa1.getStartState();
+        String[] acceptStates = nfa2.getAcceptStates(); //hold up might need work
+
+        //NFA resultingNFA = new NFA(states, alphabet, transitions, startingState, acceptStates);
+        //return resultingNFA;
         return null;
     }
 
