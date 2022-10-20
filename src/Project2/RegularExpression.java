@@ -13,6 +13,9 @@ public class RegularExpression {
     private String regularExpression;
     private NFA nfa;
 
+    private int stateCounter = 0;
+    char[] alphabet = {'0', '1'};
+
     // You are not allowed to change the name of this class or this constructor at all.
     public RegularExpression(String regularExpression) {
         this.regularExpression = regularExpression.replaceAll("\\s+", "");
@@ -41,13 +44,12 @@ public class RegularExpression {
         //work begins here
         String[] states = new String[nfa1.getStates().length + nfa2.getStates().length];
         int numStates = states.length;
-        for (int i = 0; i < numStates; i++) { //renames states to be S1, S2, S3....
-            states[i] = "S" + (i+1);
+        for (int i = 0; i < numStates; i++) { //renames states to be unique names
+            states[i] = "S" + stateCounter;
+            stateCounter++;
         }
+        String[] acceptStates = nfa2.getAcceptStates(); //definitely something needs to be done
 
-        char[] alphabet = {'0', '1'}; //should stay the same??
-        //maybe needed below??
-        //char[] alphabet = Chars.concat(nfa1.getAlphabet(), nfa2.getAlphabet());
 
         //transitions go here
         HashMap<String, HashMap<Character, HashSet<String>>> nfa1Transitions = nfa1.getTransitions();
@@ -62,10 +64,11 @@ public class RegularExpression {
 
         HashMap<Character, HashSet<String>> transition = new HashMap<>();
         //something like this
-        for (int i = 0; i < states.length; i++) {
+        for (int i = 0; i < nfa1.getStates().length; i++) {
             transition.put('0', new HashSet<>(Arrays.asList("S2"))); //nfa1Transitions.get("S1").get('0')
             transitions.put(("S" + (i+1)), transition);
         }
+        //plus the length of nfa1 to get nfa2
         //transition.put('0', new HashSet<>(Arrays.asList("S2")));
         //transitions.put("S1", transition);
 
@@ -73,7 +76,11 @@ public class RegularExpression {
         //but with what alphabet characters?
 
         String startingState = nfa1.getStartState();
-        String[] acceptStates = nfa2.getAcceptStates(); //hold up might need work
+        //hold up might need work
+        //String[] secondNFAstates = nfa2.getStates();
+        //for (int i = 0; i < secondNFAstates.length; i++) {
+        //    if ()
+        //}
 
         //NFA resultingNFA = new NFA(states, alphabet, transitions, startingState, acceptStates);
         //return resultingNFA;
@@ -137,7 +144,6 @@ public class RegularExpression {
         //transitions.put("S1", transition);
 
         String[] states = {"S1", "S2"};
-        char[] alphabet = new char[] {'0', '1'};
 
         HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>(); //starting state, what numbers (1,0_),m ending states
         HashMap<Character, HashSet<String>> transition = new HashMap<>();
