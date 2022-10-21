@@ -35,13 +35,13 @@ public class RegularExpression {
             states[n-i]="S" + (stateCounter - i);
         }
 
-        //Set new start state as last state
+        //changes last state to new start state
         String startState = states[states.length-1];
 
         //Add adjusted acceptStates
-        int numAccept = nfa1.getAcceptStates().length + nfa1.getAcceptStates().length;
-        String[] acceptStates = new String[numAccept];
-        for(int i= 0; i<numAccept; i++) {
+        int numberToAccept = nfa1.getAcceptStates().length + nfa1.getAcceptStates().length;
+        String[] acceptStates = new String[numberToAccept];
+        for(int i= 0; i<numberToAccept; i++) {
             String acceptState;
             if(i<nfa1.getAcceptStates().length) {
                 acceptState = nfa1.getAcceptStates()[i];
@@ -63,7 +63,6 @@ public class RegularExpression {
         transition.put('e', new HashSet<>(Arrays.asList(changeState(nfa1.getStartState(), n),changeState(nfa2.getStartState(), n))));
         transitions.put(startState, transition);
 
-        //Construct NFA
         NFA resultingNFA = new NFA(states, alphabet, transitions, startState, acceptStates);
 
         return resultingNFA;
@@ -71,11 +70,11 @@ public class RegularExpression {
 
     // TODO: Complete this method so that it returns the nfa resulting from concatenating the two input nfas.
     private NFA concatenate(NFA nfa1, NFA nfa2) {
-        //Count new states
+        //get number of states
         int n = nfa1.getStates().length + nfa2.getStates().length;
         stateCounter = stateCounter + n;
 
-        //Adjust State Values
+        //changed the state names
         String[] states = new String[n];
         for(int i=0; i<n; i++){
             states[n-i-1]="S" + (stateCounter - i);
@@ -84,7 +83,7 @@ public class RegularExpression {
         //Adjust nfa1 start state
         String startState = changeState(nfa1.getStartState(),n);
 
-        //Add nf2 adjusted acceptStates
+        //adjusts
         int numAccept = nfa2.getAcceptStates().length;
         String[] acceptStates = new String[numAccept];
         for(int i= 0; i<numAccept; i++) {
@@ -92,7 +91,7 @@ public class RegularExpression {
             acceptStates[i] = changeState(acceptState,n);
         }
 
-        //Add transitions
+        //adds transitions to main map
         HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>();
         HashMap<Character, HashSet<String>> transition;
         addNewTransitions(nfa1, n, transitions);
