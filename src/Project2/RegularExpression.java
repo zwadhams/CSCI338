@@ -25,73 +25,109 @@ public class RegularExpression {
 
     // TODO: Complete this method so that it returns the nfa resulting from unioning the two input nfas.
     private NFA union(NFA nfa1, NFA nfa2) {
-        return null;
+        //count new states
+        int n = nfa1.getStates().length + nfa2.getStates().length;
+        stateCounter = stateCounter + n + 1;
+
+        //Adjust State Values
+        String[] states = new String[n+1];
+        for(int i=0; i<n+1; i++){
+            states[n-i]="S" + (stateCounter - i);
+        }
+
+        //Set new start state as last state
+        String startState = states[states.length-1];
+
+        //Add adjusted acceptStates
+        int numAccept = nfa1.getAcceptStates().length + nfa1.getAcceptStates().length;
+        String[] acceptStates = new String[numAccept];
+        for(int i= 0; i<numAccept; i++) {
+            String acceptState;
+            if(i<nfa1.getAcceptStates().length) {
+                acceptState = nfa1.getAcceptStates()[i];
+            }
+            else{
+                acceptState = nfa2.getAcceptStates()[i-nfa1.getAcceptStates().length];
+            }
+            acceptStates[i] = changeState(acceptState,n);
+        }
+
+        //creates transitions
+        HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>();
+        HashMap<Character, HashSet<String>> transition;
+        addNewTransitions(nfa1, n, transitions);
+        addNewTransitions(nfa2, n, transitions);
+
+        //handles epsilons
+        transition = new HashMap<>();
+        transition.put('e', new HashSet<>(Arrays.asList(changeState(nfa1.getStartState(), n),changeState(nfa2.getStartState(), n))));
+        transitions.put(startState, transition);
+
+        //Construct NFA
+        NFA resultingNFA = new NFA(states, alphabet, transitions, startState, acceptStates);
+
+        return resultingNFA;
     }
 
     // TODO: Complete this method so that it returns the nfa resulting from concatenating the two input nfas.
     private NFA concatenate(NFA nfa1, NFA nfa2) {
-        // NFA creation example.
-        //String[] states = new String[] {"S1", "S2", "S3", "S4"};
-        //char[] alphabet = new char[] {'0', '1'};
+        //Count new states
+        int n = nfa1.getStates().length + nfa2.getStates().length;
+        stateCounter = stateCounter + n;
 
-        // Create HashMap of all transitions in NFA.
-        //HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>();
-
-        // Create all transitions from S1 with character 0. (There is only one - to S2)
-        //HashMap<Character, HashSet<String>> transition = new HashMap<>();
-        //transition.put('0', new HashSet<>(Arrays.asList("S2")));
-        //transitions.put("S1", transition);
-
-        //work begins here
-        String[] states = new String[nfa1.getStates().length + nfa2.getStates().length];
-        int numStates = states.length;
-        for (int i = 0; i < numStates; i++) { //renames states to be unique names
-            states[i] = "S" + stateCounter;
-            stateCounter++;
+        //Adjust State Values
+        String[] states = new String[n];
+        for(int i=0; i<n; i++){
+            states[n-i-1]="S" + (stateCounter - i);
         }
-        String[] acceptStates = nfa2.getAcceptStates(); //definitely something needs to be done
 
+        //Adjust nfa1 start state
+        String startState = changeState(nfa1.getStartState(),n);
 
+        //Add nf2 adjusted acceptStates
+        int numAccept = nfa2.getAcceptStates().length;
+        String[] acceptStates = new String[numAccept];
+        for(int i= 0; i<numAccept; i++) {
+            String acceptState = nfa2.getAcceptStates()[i];
+            acceptStates[i] = changeState(acceptState,n);
+        }
 
-        //transitions go here
-        HashMap<String, HashMap<Character, HashSet<String>>> nfa1Transitions = nfa1.getTransitions();
-        HashMap<String, HashMap<Character, HashSet<String>>> nfa2Transitions = nfa2.getTransitions();
-
-        System.out.println(nfa1Transitions.get("S1"));
-        System.out.println(nfa1Transitions.get("S1").get('0'));
-        //make transition from accept states of nfa1 to start state of nfa2
-        //but with what alphabet characters?
-
+        //Add transitions
         HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>();
+        HashMap<Character, HashSet<String>> transition;
+        addNewTransitions(nfa1, n, transitions);
+        addNewTransitions(nfa2, n, transitions);
 
-        //OVERRIDING TRANSITIONS------------------------------------------------------------
-        //dont put into a hash map unless it doenst have that element there CHECK IT FIRST
-        System.out.println(Arrays.toString(states));//!!!!!!!!!!!
-        //.containsKey() returns true transitions.get(p0)
-        HashMap<Character, HashSet<String>> transition = new HashMap<>();
-        //something like this
-        for (int i = 0; i < nfa1.getStates().length; i++) {
-            //if (nfa1Transitions.get())
-            transition.put('0', new HashSet<>(Arrays.asList("S2"))); //nfa1Transitions.get("S1").get('0')
-            transitions.put(("S" + (i+1)), transition);
+        //handles epsilon transitions
+        for(String oldAcceptState : nfa1.getAcceptStates()){
+            String nf1AcceptState = changeState(oldAcceptState,n);
+            transition = new HashMap<>();
+            transition.put('e' , new HashSet<>(Arrays.asList(changeState(nfa2.getStartState(),n))));
+            transitions.put(nf1AcceptState, transition);
         }
-        //plus the length of nfa1 to get nfa2
-        //transition.put('0', new HashSet<>(Arrays.asList("S2")));
-        //transitions.put("S1", transition);
 
-        //make transition from accept states of nfa1 to start state of nfa2
-        //but with what alphabet characters?
+        //Construct NFA
+        NFA resultingNFA = new NFA(states, alphabet, transitions, startState, acceptStates);
 
-        String startingState = nfa1.getStartState();
-        //hold up might need work
-        //String[] secondNFAstates = nfa2.getStates();
-        //for (int i = 0; i < secondNFAstates.length; i++) {
-        //    if ()
-        //}
+        return resultingNFA;
+    }
 
-        //NFA resultingNFA = new NFA(states, alphabet, transitions, startingState, acceptStates);
-        //return resultingNFA;
-        return null;
+    private String changeState(String names, int n){
+        return "S" + (Integer.valueOf(names.substring(1)) + n);
+    }
+
+    private void addNewTransitions(NFA nfa1, int n, HashMap<String, HashMap<Character, HashSet<String>>> transitions) {
+        HashMap<Character, HashSet<String>> transition;
+        for(String state1 : nfa1.getTransitions().keySet()){
+            HashMap<Character, HashSet<String>> state1Trans = nfa1.getTransitions().get(state1);
+            for(char event : state1Trans.keySet()){
+                for(String state2: state1Trans.get(event)){
+                    transition = new HashMap<>();
+                    transition.put(event , new HashSet<>(Arrays.asList(changeState(state2, n))));
+                    transitions.put(changeState(state1, n), transition);
+                }
+            }
+        }
     }
 
     // TODO: Complete this method so that it returns the nfa resulting from "staring" the input nfa.
@@ -138,36 +174,34 @@ public class RegularExpression {
 
     // TODO: Complete this method so that it returns the nfa that only accepts the character c.
     private NFA singleCharNFA(char c) {
-        // NFA creation example.
-        //String[] states = new String[] {"S1", "S2", "S3", "S4"};
-        //char[] alphabet = new char[] {'0', '1'};
 
-        // Create HashMap of all transitions in NFA.
-        //HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>();
-
-        // Create all transitions from S1 with character 0. (There is only one - to S2)
-        //HashMap<Character, HashSet<String>> transition = new HashMap<>();
-        //transition.put('0', new HashSet<>(Arrays.asList("S2")));
-        //transitions.put("S1", transition);
-
-        String[] states = {"S1", "S2"};
-
-        HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>(); //starting state, what numbers (1,0_),m ending states
-        HashMap<Character, HashSet<String>> transition = new HashMap<>();
-        if (c == '0') {
-            transition.put('0', new HashSet<>(Arrays.asList("S2")));
-            transitions.put("S1", transition);
-        } else if (c == '1') {
-            transition.put('1', new HashSet<>(Arrays.asList("S2")));
-            transitions.put("S1", transition);
+        int n = 2;
+        int[] stateCount = new int[n]; //will ALWAYS be at most two long
+        for(int i=0; i<n; i++){
+            stateCounter++;
+            stateCount[i]=stateCounter;
         }
 
-        String startState = "S1";
-        String[] acceptStates = {"S2"};
+        //NFA Attributes
+        String[] states = new String[n];
+        for(int i=0; i<n; i++){
+            states[i]="S" + Integer.toString(stateCount[i]);
+        }
 
-        NFA nfa1 = new NFA(states, alphabet, transitions, startState, acceptStates);
+        String startState = states[0]; //stays the same
+        String[] acceptStates = new String[]{states[1]};
 
-        return nfa1;
+        //Add transitions
+        HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>();
+
+        //transition from first state to second using the passed in character
+        HashMap<Character, HashSet<String>> transition = new HashMap<>();
+        transition.put(c , new HashSet<>(Arrays.asList(states[1])));
+        transitions.put(states[0], transition);
+
+        NFA nfa = new NFA(states, alphabet, transitions, startState, acceptStates);
+
+        return nfa;
     }
 
     // You are not allowed to change this method's header at all.
