@@ -6,8 +6,9 @@ import java.util.HashSet;
 
 
 /**
- *
- * @author yaw
+ * Zach Wadhams
+ * Zach Snyder
+ * Kai Dockens
  */
 public class RegularExpression {
 
@@ -29,7 +30,7 @@ public class RegularExpression {
         int n = nfa1.getStates().length + nfa2.getStates().length;
         stateCounter = stateCounter + n + 1;
 
-        //Adjust State Values
+        //changes state names
         String[] states = new String[n+1];
         for(int i=0; i<n+1; i++){
             states[n-i]="S" + (stateCounter - i);
@@ -55,10 +56,10 @@ public class RegularExpression {
         //creates transitions
         HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>();
         HashMap<Character, HashSet<String>> transition;
-        addNewTransitions(nfa1, n, transitions);
-        addNewTransitions(nfa2, n, transitions);
+        addNewTransitions(nfa1, n, transitions); //adds transition from first nfa
+        addNewTransitions(nfa2, n, transitions); //adds transition from second nfa
 
-        //handles epsilons
+        //handles epsilon transitions
         transition = new HashMap<>();
         transition.put('e', new HashSet<>(Arrays.asList(changeState(nfa1.getStartState(), n),changeState(nfa2.getStartState(), n))));
         transitions.put(startState, transition);
@@ -75,13 +76,12 @@ public class RegularExpression {
         stateCounter = stateCounter + n;
 
         //changed the state names
-        String[] states = new String[n];
+        String[] NewStates = new String[n];
         for(int i=0; i<n; i++){
-            states[n-i-1]="S" + (stateCounter - i);
+            NewStates[n-i-1]="S" + (stateCounter - i);
         }
 
-        //Adjust nfa1 start state
-        String startState = changeState(nfa1.getStartState(),n);
+        String newStartState = changeState(nfa1.getStartState(),n);
 
         //adjusts
         int numAccept = nfa2.getAcceptStates().length;
@@ -106,10 +106,12 @@ public class RegularExpression {
         }
 
         //Construct NFA
-        NFA resultingNFA = new NFA(states, alphabet, transitions, startState, acceptStates);
+        NFA resultingNFA = new NFA(NewStates, alphabet, transitions, newStartState, acceptStates);
 
         return resultingNFA;
     }
+
+    //below are two helper functions to add transitions and maniuplate the state names
 
     private String changeState(String names, int n){
         return "S" + (Integer.valueOf(names.substring(1)) + n);
@@ -131,21 +133,39 @@ public class RegularExpression {
 
     // TODO: Complete this method so that it returns the nfa resulting from "staring" the input nfa.
     private NFA star(NFA nfa) {
-        //getting stuff from input nfa
-        String[] states = nfa.getStates(); //shouldn't be affected
-        char[] alphabet = nfa.getAlphabet(); //shouldn't be affected
+        //keeps track of the new states
+        int n = nfa.getStates().length;
+        stateCounter = stateCounter + n + 1;
 
-        HashMap<String, HashMap<Character, HashSet<String>>> transitions = nfa.getTransitions();
+        //works on state names
+        String[] newStates = new String[n+1];
+        for(int i=0; i<n+1; i++){
+            newStates[n-i]="S" + (stateCounter - i);
+        }
 
-        String startState = nfa.getStartState(); //shouldn't be affected
-        //adds the start state to the accept states
-        String[] acceptStates = new String[nfa.getAcceptStates().length + 1];
-        acceptStates = nfa.getAcceptStates();
-        acceptStates[-1] = startState;
+        String newStartState = newStates[newStates.length-1];
 
+        //changes accept states
+        int numToAccept = nfa.getAcceptStates().length + 1;
+        String[] acceptStates = new String[numToAccept];
+        acceptStates[0] = newStartState;
+        for(int i= 1; i<numToAccept; i++) {
+            acceptStates[i] = changeState(nfa.getAcceptStates()[i-1],n);
+        }
+        HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>();
+        HashMap<Character, HashSet<String>> transition;
+        addNewTransitions(nfa, n, transitions);
 
-        NFA resultingNfa = new NFA(states, alphabet, transitions, startState, acceptStates);
-        return resultingNfa;
+        //handles epsilon transitions
+        for(String acceptState : acceptStates) {
+            transition = new HashMap<>();
+            transition.put('e', new HashSet<>(Arrays.asList(changeState(nfa.getStartState(), n))));
+            transitions.put(acceptState, transition);
+        }
+
+        NFA resultingNFA = new NFA(newStates, alphabet, transitions, newStartState, acceptStates);
+
+        return resultingNFA;
     }
 
     // TODO: Complete this method so that it returns the nfa resulting from "plussing" the input nfa.
