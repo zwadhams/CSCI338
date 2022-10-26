@@ -143,14 +143,14 @@ public class RegularExpression {
             newStates[n-i]="S" + (stateCounter - i);
         }
 
-        String newStartState = newStates[newStates.length-1];
+        String newStartState = newStates[newStates.length - 1];
 
         //changes accept states
         int numToAccept = nfa.getAcceptStates().length + 1;
         String[] acceptStates = new String[numToAccept];
         acceptStates[0] = newStartState;
-        for(int i= 1; i<numToAccept; i++) {
-            acceptStates[i] = changeState(nfa.getAcceptStates()[i-1],n);
+        for(int i= 1; i < numToAccept; i++) {
+            acceptStates[i] = changeState(nfa.getAcceptStates()[i - 1], n);
         }
         HashMap<String, HashMap<Character, HashSet<String>>> transitions = new HashMap<>();
         HashMap<Character, HashSet<String>> transition;
@@ -169,25 +169,28 @@ public class RegularExpression {
     }
 
     // TODO: Complete this method so that it returns the nfa resulting from "plussing" the input nfa.
-    private NFA plus(NFA nfa) {
-        //getting stuff from input nfa
-        String[] states = nfa.getStates();
-        char[] alphabet = nfa.getAlphabet(); //shouldn't be affected
+    private NFA plus(NFA nfa) { //doesnt work 100% so rip :((
 
-        HashMap<String, HashMap<Character, HashSet<String>>> transitions = nfa.getTransitions();
+        NFA nfa3 = star(nfa);
+        String[] states = nfa3.getStates();
 
-        String startState = nfa.getStartState(); //shouldn't be affected
-        //adds the start state to the accept states
-        String[] acceptStates = new String[nfa.getAcceptStates().length + 1];
-        acceptStates = nfa.getAcceptStates();
-        //acceptStates[-1] = startState;
+        int count = 0;
 
-        //working on plussing it
+        HashMap<String, HashMap<Character, HashSet<String>>> newTransitions = nfa3.getTransitions(); //transitions stay the same
 
+        String startState = nfa3.getStartState(); //shouldn't be affected
 
-        //NFA nfa1 = new NFA(states, alphabet, transitions, startState, acceptStates);
-        //System.out.println(nfa);
-        NFA resultingNfa = new NFA(states, alphabet, transitions, startState, acceptStates);
+        //changes start state to be accept state
+        String[] newAcceptStates = new String[nfa3.getAcceptStates().length - 1]; //correct size of array
+        newAcceptStates = nfa.getAcceptStates();
+        for(String acceptState : nfa3.getAcceptStates()){
+            if(acceptState != startState){
+                newAcceptStates[count] = acceptState;
+                count++;
+            }
+        }
+
+        NFA resultingNfa = new NFA(states, alphabet, newTransitions, startState, newAcceptStates);
         return resultingNfa;
     }
 
