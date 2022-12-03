@@ -34,7 +34,7 @@ public class Graph {
                 }
             }
         } catch (FileNotFoundException ex) {
-            System.out.println("File not found. Try putting file in same filder as src folder.");
+            System.out.println("File not found. Try putting file in same folder as src folder.");
         } catch (IOException ex) {
             System.out.println("Exception: " + ex.toString());
         }
