@@ -51,11 +51,6 @@ public class GraphToolBox {
         //gets size
         boolean visited[] = new boolean[graphSize]; //gets size
 
-        //sets all to false by default
-        for (int i = 0; i < graphSize; i++) {
-            visited[i] = false;
-        }
-
         //logic to determine if two vercies are connected
         int currentVertex;
         for (int i = 0; i < graphSize; i++) { //each vertice
@@ -92,12 +87,12 @@ public class GraphToolBox {
         ArrayList<Integer> listOfIgnoredVertices = new ArrayList<Integer>();
 
         //gets smallest vertex cover by removing node 1 and so forth until it is not a vertex cover
-        int count = 0;
+        int brokeOn = 0;
         for (int i = 0; i < originalGraph.length; i++) {
                 listOfIgnoredVertices.add(i);
                 boolean isVertexCover = isVC(originalGraph, listOfIgnoredVertices);
-                count++;
                 if (!isVertexCover) {
+                    brokeOn = i;
                     break;
                 }
             }
@@ -105,7 +100,7 @@ public class GraphToolBox {
         ArrayList<Integer> ALvertexVC = new ArrayList<Integer>();
 
         for (int i = 0; i < originalGraph.length; i++) {
-            if (!listOfIgnoredVertices.contains(i)) {
+            if (!listOfIgnoredVertices.contains(i) || i == brokeOn) {
                 ALvertexVC.add(i);
             }
         }
@@ -137,23 +132,21 @@ public class GraphToolBox {
         System.out.println("Is the set of no vertices an IS?: " + isitIS);
 
         //testing
-
+        int brokeOn = 0;
         //gets largest independent by adding node 1 (by removing from ignored) and so forth until it is not an independent set
         for (int i = originalGraph.length - 1; i > -1; i--) {
-
-            boolean isIndependentSet = isIS(originalGraph, listOfIgnoredVertices);
             listOfIgnoredVertices.remove(i);
+            boolean isIndependentSet = isIS(originalGraph, listOfIgnoredVertices);
             if (!isIndependentSet) {
+                brokeOn = i;
                 break;
             }
         }
 
-        System.out.println(listOfIgnoredVertices.size());
-
         ArrayList<Integer> ALvertexIS = new ArrayList<Integer>();
 
         for (int i = 0; i < originalGraph.length; i++) {
-            if (!listOfIgnoredVertices.contains(i)) {
+            if (!listOfIgnoredVertices.contains(i) && i != brokeOn) {
                 ALvertexIS.add(i);
             }
         }
@@ -186,7 +179,6 @@ public class GraphToolBox {
         System.out.println("-------------------------------------------");
 
         System.out.println("----------Inexact Independent Set----------");
-        //To be implemented
         int[] inexactISAnswer = inexactIS(graph1);
         System.out.println("List of vertices in independent set:");
         System.out.println(Arrays.toString(inexactISAnswer));
