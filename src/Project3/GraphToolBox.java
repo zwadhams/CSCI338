@@ -21,7 +21,7 @@ public class GraphToolBox {
             visited[i] = false;
         }
 
-        //sets each vertice and neighbors true unless it is to be ignored
+        //sets each vertex and neighbors true unless it is to be ignored
         for (int u = 0; u < graphSize; u++) {
             if (visited[u] == false && !listOfIgnoredVertices.contains(u)) {
                 for (int j = 0; j < originGraph[u].length; j++) {
@@ -40,7 +40,7 @@ public class GraphToolBox {
             }
         }
 
-        //if it passes everything, it is a vertex cover
+        //if it gets to here, it is a vertex cover
         return true;
     }
 
