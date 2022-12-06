@@ -1,5 +1,6 @@
 package Project3;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Arrays;
 public class GraphToolBox {
 
     //Should be working, gotta test it some more
-    public static boolean isVC(int[][] originGraph, int startingVertex) {
+    public static boolean isVC(int[][] originGraph, ArrayList<Integer> listOfIgnoredVertices) {
         int graphSize = originGraph.length;
 
         //gets size
@@ -19,22 +20,10 @@ public class GraphToolBox {
         for (int i = 0; i < graphSize; i++) {
             visited[i] = false;
         }
-        //checks all edges and marks vertex if visited
-        //working code below
 
-        /*for (int u = 0; u < graphSize; u++) {
-            if (visited[u] == false) {
-                for (int j = 0; j < originGraph[u].length; j++) {
-                    if (originGraph[u] != null) {
-                        visited[originGraph[u][j]] = true;
-                        visited[u] = true;
-                    }
-                }
-            }
-        }*/
-
-        for (int u = startingVertex; u < graphSize - startingVertex; u++) {
-            if (visited[u] == false) {
+        //sets each vertice and neighbors true unless it is to be ignored
+        for (int u = 0; u < graphSize; u++) {
+            if (visited[u] == false && !listOfIgnoredVertices.contains(u)) {
                 for (int j = 0; j < originGraph[u].length; j++) {
                     if (originGraph[u] != null) {
                         visited[originGraph[u][j]] = true;
@@ -43,8 +32,6 @@ public class GraphToolBox {
                 }
             }
         }
-
-        System.out.println(Arrays.toString(visited));
 
         //checks if there are any false in visited, if so, it is not a vertex cover
         for (int i = 0; i < visited.length; i++) {
@@ -67,46 +54,33 @@ public class GraphToolBox {
 
 
         int[][] originalGraph = inputGraph.getGraph(); //adjacency matrix
-        int numVert = originalGraph.length;
 
-        //testing stuff
-        System.out.println(Arrays.toString(originalGraph[0]));
-        System.out.println(originalGraph[0].length);
-        System.out.println(Arrays.toString(originalGraph[1]));
-        System.out.println(originalGraph[1].length);
-        System.out.println(originalGraph[0][0]);
+        ArrayList<Integer> listOfIgnoredVertices = new ArrayList<Integer>();
 
-        System.out.println("Is the original graph a vertex cover?");
-        System.out.println(isVC(originalGraph, 0));
-        System.out.println("Reducing the graph to see if the next is a cover");
-
-        int[][] tempGraph = originalGraph;
-
-        System.out.println("Trying to see if this will fail");
-        System.out.println(isVC(originalGraph, 7));
-
-        //System.out.println(Arrays.toString(tempGraph[0]));
-        //System.out.println(Arrays.toString(tempGraph[1]));
-
-        //actual logic
-
-
-
-        //checking for base vertex cover functionality
-        //gonna randomly remove a row and check if it is a vertex cover
-        //DONT REMOVE A ROW, just set it to be empty
-        /*for (int i = 0; i < originalGraph.length; i++) {
-            if (isVC(tempGraph) == true) {
-                int[] vertexNumbers = new int[tempGraph.length];
-                for (int j = 0; j < tempGraph.length; j++) {
-                    vertexNumbers[j] = tempGraph[i][j];
+        //gets smallest vertex cover by removing node 1 and so forth until it is not a vertex cover
+        int count = 0;
+        for (int i = 0; i < originalGraph.length; i++) {
+                listOfIgnoredVertices.add(i);
+                boolean isVertexCover = isVC(originalGraph, listOfIgnoredVertices);
+                count++;
+                if (!isVertexCover) {
+                    break;
                 }
-
-                return vertexNumbers;
             }
-        }*/
 
-        return null;
+        ArrayList<Integer> ALvertexVC = new ArrayList<Integer>();
+
+        Integer[] vertexVC = new Integer[originalGraph.length - listOfIgnoredVertices.size()];
+
+        for (int i = 0; i < originalGraph.length; i++) {
+            if (!listOfIgnoredVertices.contains(i)) {
+                ALvertexVC.add(i);
+            }
+        }
+
+        int[] arr = ALvertexVC.stream().mapToInt(i -> i).toArray();
+
+        return arr;
     }
     
     // return an array containing the vertex numbers of an optimal IS.
@@ -119,8 +93,6 @@ public class GraphToolBox {
         return null;
     }
 
-
-
     //Running the stuff down here
 
 
@@ -128,9 +100,16 @@ public class GraphToolBox {
 
         Graph graph1 = new Graph("graph1.txt");
 
+        System.out.println("------------Exact Vertex Cover------------");
+        //To be implemented
+        System.out.println("-------------------------------------------");
+
+        System.out.println("------------Inexact Vertex Cover------------");
         int[] inexactVCAnswer = inexactVC(graph1);
-        System.out.println("Number of vertices in the inexact vertex cover: ");
-        System.out.println(inexactVCAnswer.length);
+        System.out.println("List of vertices in vertex cover:");
+        System.out.println(Arrays.toString(inexactVCAnswer));
+        System.out.println("Number of vertices in the inexact vertex cover: " + inexactVCAnswer.length);
+        System.out.println("-------------------------------------------");
     }
 
 }
