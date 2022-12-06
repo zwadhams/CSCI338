@@ -39,6 +39,7 @@ public class GraphToolBox {
                 return false;
             }
         }
+
         //if it passes everything, it is a vertex cover
         return true;
     }
@@ -70,8 +71,6 @@ public class GraphToolBox {
 
         ArrayList<Integer> ALvertexVC = new ArrayList<Integer>();
 
-        Integer[] vertexVC = new Integer[originalGraph.length - listOfIgnoredVertices.size()];
-
         for (int i = 0; i < originalGraph.length; i++) {
             if (!listOfIgnoredVertices.contains(i)) {
                 ALvertexVC.add(i);
@@ -94,8 +93,6 @@ public class GraphToolBox {
     }
 
     //Running the stuff down here
-
-
     public static void main(String[] args) {
 
         Graph graph1 = new Graph("graph1.txt");
@@ -109,6 +106,14 @@ public class GraphToolBox {
         System.out.println("List of vertices in vertex cover:");
         System.out.println(Arrays.toString(inexactVCAnswer));
         System.out.println("Number of vertices in the inexact vertex cover: " + inexactVCAnswer.length);
+        System.out.println("-------------------------------------------");
+
+        System.out.println("----------Optimal Independent Set----------");
+        //To be implemented
+        System.out.println("-------------------------------------------");
+
+        System.out.println("----------Inexact Independent Set----------");
+        //To be implemented
         System.out.println("-------------------------------------------");
     }
 
