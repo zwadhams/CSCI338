@@ -126,10 +126,6 @@ public class GraphToolBox {
         for (int i = 0; i < originalGraph.length; i++) {
             listOfIgnoredVertices.add(i);
         }
-        System.out.println("Number of initial ignored vertices: " + listOfIgnoredVertices.size());
-
-        boolean isitIS = isIS(originalGraph, listOfIgnoredVertices);
-        System.out.println("Is the set of no vertices an IS?: " + isitIS);
 
         //testing
         int brokeOn = 0;
