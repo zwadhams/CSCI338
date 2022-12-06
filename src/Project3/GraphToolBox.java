@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public class GraphToolBox {
 
-    //Should be working, gotta test it some more
+    //function to determine if a graph (minus some vertices specified in listOfIgnoredVertices) is a vertex cover
     public static boolean isVC(int[][] originGraph, ArrayList<Integer> listOfIgnoredVertices) {
         int graphSize = originGraph.length;
 
@@ -41,6 +41,39 @@ public class GraphToolBox {
         }
 
         //if it gets to here, it is a vertex cover
+        return true;
+    }
+
+    //needs work
+    public static boolean isIS(int[][] originGraph, ArrayList<Integer> listOfIgnoredVertices) {
+        int graphSize = originGraph.length;
+
+        //gets size
+        boolean visited[] = new boolean[graphSize]; //gets size
+
+        //sets all to false by default
+        for (int i = 0; i < graphSize; i++) {
+            visited[i] = false;
+        }
+
+        //logic to determine if two vercies are connected
+        int currentVertex;
+        for (int i = 0; i < graphSize; i++) { //each vertice
+            if (!listOfIgnoredVertices.contains(i)) {
+                currentVertex = i;
+                for (int j = 0; j < graphSize; j++) {
+                    if (currentVertex != j && !listOfIgnoredVertices.contains(j)) {
+                        for (int k = 0; k < originGraph[currentVertex].length; k++) {
+                            if (originGraph[j][k] == currentVertex) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //if it gets to here, it is an independent set
         return true;
     }
 
@@ -89,11 +122,51 @@ public class GraphToolBox {
     
     // return (in polynomial time) an array containing the vertex numbers of a IS.
     public static int[] inexactIS(Graph inputGraph) {
-        return null;
+
+        int[][] originalGraph = inputGraph.getGraph(); //adjacency matrix
+
+        ArrayList<Integer> listOfIgnoredVertices = new ArrayList<Integer>();
+
+        //fill our ignoredVertices
+        for (int i = 0; i < originalGraph.length; i++) {
+            listOfIgnoredVertices.add(i);
+        }
+        System.out.println("Number of initial ignored vertices: " + listOfIgnoredVertices.size());
+
+        boolean isitIS = isIS(originalGraph, listOfIgnoredVertices);
+        System.out.println("Is the set of no vertices an IS?: " + isitIS);
+
+        //testing
+
+        //gets largest independent by adding node 1 (by removing from ignored) and so forth until it is not an independent set
+        for (int i = originalGraph.length - 1; i > -1; i--) {
+
+            boolean isIndependentSet = isIS(originalGraph, listOfIgnoredVertices);
+            listOfIgnoredVertices.remove(i);
+            if (!isIndependentSet) {
+                break;
+            }
+        }
+
+        System.out.println(listOfIgnoredVertices.size());
+
+        ArrayList<Integer> ALvertexIS = new ArrayList<Integer>();
+
+        for (int i = 0; i < originalGraph.length; i++) {
+            if (!listOfIgnoredVertices.contains(i)) {
+                ALvertexIS.add(i);
+            }
+        }
+
+        int[] arr = ALvertexIS.stream().mapToInt(i -> i).toArray();
+
+        return arr;
     }
 
     //Running the stuff down here
     public static void main(String[] args) {
+
+
 
         Graph graph1 = new Graph("graph1.txt");
 
@@ -114,6 +187,10 @@ public class GraphToolBox {
 
         System.out.println("----------Inexact Independent Set----------");
         //To be implemented
+        int[] inexactISAnswer = inexactIS(graph1);
+        System.out.println("List of vertices in independent set:");
+        System.out.println(Arrays.toString(inexactISAnswer));
+        System.out.println("Number of vertices in the inexact independent set: " + inexactISAnswer.length);
         System.out.println("-------------------------------------------");
     }
 
