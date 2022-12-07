@@ -23,7 +23,7 @@ public class GraphToolBox {
 
         //sets each vertex and neighbors true unless it is to be ignored
         for (int u = 0; u < graphSize; u++) {
-            if (visited[u] == false && !listOfIgnoredVertices.contains(u)) {
+            if (!listOfIgnoredVertices.contains(u)) {
                 for (int j = 0; j < originGraph[u].length; j++) {
                     if (originGraph[u] != null) {
                         visited[originGraph[u][j]] = true;
@@ -85,6 +85,14 @@ public class GraphToolBox {
         int[][] originalGraph = inputGraph.getGraph(); //adjacency matrix
 
         ArrayList<Integer> listOfIgnoredVertices = new ArrayList<Integer>();
+
+        listOfIgnoredVertices.add(1);
+        listOfIgnoredVertices.add(5);
+
+        boolean testVC = isVC(originalGraph, listOfIgnoredVertices);
+        System.out.println("Is the test a vc?" + testVC);
+
+        listOfIgnoredVertices.clear();
 
         //gets smallest vertex cover by removing node 1 and so forth until it is not a vertex cover
         int brokeOn = 0;
@@ -155,6 +163,12 @@ public class GraphToolBox {
     //Running the stuff down here
     public static void main(String[] args) {
 
+        Graph simpleGraph = new Graph("simple.txt");
+
+        System.out.println("Simple graph testing");
+        int [] simpleVC = inexactVC(simpleGraph);
+
+        System.out.println(Arrays.toString(simpleVC));
 
 
         Graph graph1 = new Graph("graph1.txt");
