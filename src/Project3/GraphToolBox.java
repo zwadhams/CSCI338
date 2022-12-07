@@ -17,14 +17,14 @@ public class GraphToolBox {
         boolean visited[] = new boolean[graphSize]; //gets size
 
         //sets all to false by default
-        for (int i = 0; i < graphSize; i++) {
+        for (int i = 0; i < graphSize; i++) { //O(n)
             visited[i] = false;
         }
 
         //sets each vertex and neighbors true unless it is to be ignored
-        for (int u = 0; u < graphSize; u++) {
-            if (!visited[u] && !listOfIgnoredVertices.contains(u)) {
-                for (int j = 0; j < originGraph[u].length; j++) {
+        for (int u = 0; u < graphSize; u++) { //O(n)
+            if (!listOfIgnoredVertices.contains(u)) {
+                for (int j = 0; j < originGraph[u].length; j++) { //O(n)
                     if (originGraph[u] != null) {
                         visited[originGraph[u][j]] = true;
                         visited[u] = true;
@@ -34,7 +34,7 @@ public class GraphToolBox {
         }
 
         //checks if there are any false in visited, if so, it is not a vertex cover
-        for (int i = 0; i < visited.length; i++) {
+        for (int i = 0; i < visited.length; i++) { //O(n)
             if (visited[i] == false) {
                 return false;
             }
@@ -48,12 +48,9 @@ public class GraphToolBox {
     public static boolean isIS(int[][] originGraph, ArrayList<Integer> listOfIgnoredVertices) {
         int graphSize = originGraph.length;
 
-        //gets size
-        boolean visited[] = new boolean[graphSize]; //gets size
-
-        //logic to determine if two vercies are connected
+        //logic to determine if two vertices are connected
         int currentVertex;
-        for (int i = 0; i < graphSize; i++) { //each vertice
+        for (int i = 0; i < graphSize; i++) { //each vertex
             if (!listOfIgnoredVertices.contains(i)) {
                 currentVertex = i;
                 for (int j = 0; j < graphSize; j++) {
@@ -77,7 +74,7 @@ public class GraphToolBox {
 
         return null;
     }
-    
+
     // return (in polynomial time) an array containing the vertex numbers of a VC.
     public static int[] inexactVC(Graph inputGraph) {
 
@@ -98,13 +95,13 @@ public class GraphToolBox {
         //gets smallest vertex cover by removing node 1 and so forth until it is not a vertex cover
         int brokeOn = 0;
         for (int i = 0; i < originalGraph.length; i++) {
-                listOfIgnoredVertices.add(i);
-                boolean isVertexCover = isVC(originalGraph, listOfIgnoredVertices);
-                if (!isVertexCover) {
-                    brokeOn = i;
-                    break;
-                }
+            listOfIgnoredVertices.add(i);
+            boolean isVertexCover = isVC(originalGraph, listOfIgnoredVertices);
+            if (!isVertexCover) {
+                brokeOn = i;
+                break;
             }
+        }
 
         ArrayList<Integer> ALvertexVC = new ArrayList<Integer>();
 
@@ -118,12 +115,18 @@ public class GraphToolBox {
 
         return arr;
     }
-    
+
     // return an array containing the vertex numbers of an optimal IS.
     public static int[] optimalIS(Graph inputGraph) {
+        //make it run for a super long by forcing a exponential time maybe?
+        int[][] originalGraph = inputGraph.getGraph(); //adjacency matrix
+
+
+        ArrayList<Integer> listOfIgnoredVertices = new ArrayList<Integer>();
+
         return null;
     }
-    
+
     // return (in polynomial time) an array containing the vertex numbers of a IS.
     public static int[] inexactIS(Graph inputGraph) {
 
@@ -141,7 +144,6 @@ public class GraphToolBox {
         System.out.println("Is the test a IS?" + testIS);
         listOfIgnoredVertices.clear();
          */
-
 
         //fill our ignoredVertices
         for (int i = 0; i < originalGraph.length; i++) {
@@ -204,6 +206,8 @@ public class GraphToolBox {
 
         System.out.println("----------Optimal Independent Set----------");
         //To be implemented
+        int[] optimalISAnswer = inexactVC(graph1);
+        System.out.println(Arrays.toString(optimalISAnswer));
         System.out.println("-------------------------------------------");
 
         System.out.println("----------Inexact Independent Set----------");
