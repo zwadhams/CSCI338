@@ -23,7 +23,7 @@ public class GraphToolBox {
 
         //sets each vertex and neighbors true unless it is to be ignored
         for (int u = 0; u < graphSize; u++) {
-            if (!listOfIgnoredVertices.contains(u)) {
+            if (!visited[u] && !listOfIgnoredVertices.contains(u)) {
                 for (int j = 0; j < originGraph[u].length; j++) {
                     if (originGraph[u] != null) {
                         visited[originGraph[u][j]] = true;
@@ -86,13 +86,14 @@ public class GraphToolBox {
 
         ArrayList<Integer> listOfIgnoredVertices = new ArrayList<Integer>();
 
-        listOfIgnoredVertices.add(1);
-        listOfIgnoredVertices.add(5);
-
+        //simple testing
+        /*listOfIgnoredVertices.add(0);
+        listOfIgnoredVertices.add(3);
+        System.out.println("Ignored vertices: " + listOfIgnoredVertices);
         boolean testVC = isVC(originalGraph, listOfIgnoredVertices);
         System.out.println("Is the test a vc?" + testVC);
-
         listOfIgnoredVertices.clear();
+         */
 
         //gets smallest vertex cover by removing node 1 and so forth until it is not a vertex cover
         int brokeOn = 0;
@@ -130,6 +131,18 @@ public class GraphToolBox {
 
         ArrayList<Integer> listOfIgnoredVertices = new ArrayList<Integer>();
 
+        //simple testing
+        /*listOfIgnoredVertices.add(0);
+        listOfIgnoredVertices.add(2);
+        listOfIgnoredVertices.add(3);
+        listOfIgnoredVertices.add(4);
+        System.out.println("Ignored vertices: " + listOfIgnoredVertices);
+        boolean testIS = isIS(originalGraph, listOfIgnoredVertices);
+        System.out.println("Is the test a IS?" + testIS);
+        listOfIgnoredVertices.clear();
+         */
+
+
         //fill our ignoredVertices
         for (int i = 0; i < originalGraph.length; i++) {
             listOfIgnoredVertices.add(i);
@@ -163,13 +176,18 @@ public class GraphToolBox {
     //Running the stuff down here
     public static void main(String[] args) {
 
-        Graph simpleGraph = new Graph("simple.txt");
+        //simple testing
+        /*Graph simpleGraph = new Graph("simple.txt");
 
         System.out.println("Simple graph testing");
+        System.out.println("---vertex simple---");
         int [] simpleVC = inexactVC(simpleGraph);
-
         System.out.println(Arrays.toString(simpleVC));
+        System.out.println("---ind set simple---");
+        int [] simpleIS = inexactIS(simpleGraph);
+        System.out.println(Arrays.toString(simpleIS));
 
+         */
 
         Graph graph1 = new Graph("graph1.txt");
 
