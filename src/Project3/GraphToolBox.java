@@ -75,9 +75,14 @@ public class GraphToolBox {
 
         int[][] originalGraph = inputGraph.getGraph(); //adjacency matrix
 
+        //uses power set to get every subset
+        //not working right, sorry :(
+        int[][] powerSet = new int[originalGraph.length * originalGraph.length][originalGraph.length];
+
         ArrayList<Integer> listOfIgnoredVertices = new ArrayList<Integer>();
 
         //gets smallest vertex cover by removing node 1 and so forth until it is not a vertex cover
+        ArrayList<Integer> bestSoFar = new ArrayList<Integer>();
         int brokeOn = 0;
         for (int i = 0; i < originalGraph.length; i++) {
             listOfIgnoredVertices.add(i);
@@ -85,6 +90,18 @@ public class GraphToolBox {
             if (!isVertexCover) {
                 brokeOn = i;
                 break;
+            }
+            bestSoFar.add(i);
+            for (int k = 0; k < powerSet.length; k++) {
+                for (int j = 0; j < originalGraph.length; j++) {
+                    if (powerSet.length == listOfIgnoredVertices.get(k)) {
+                        brokeOn = i;
+                        break;
+                    }
+                    else {
+                        listOfIgnoredVertices.add(i);
+                    }
+                }
             }
         }
 
