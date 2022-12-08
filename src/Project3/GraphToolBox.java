@@ -239,8 +239,10 @@ public class GraphToolBox {
 
         System.out.println("----------Optimal Independent Set----------");
         //To be implemented
-        int[] optimalISAnswer = inexactVC(simpleGraph);
+        int[] optimalISAnswer = optimalIS(simpleGraph);
+        System.out.println("List of vertices in independent set:");
         System.out.println(Arrays.toString(optimalISAnswer));
+        System.out.println("Number of vertices in the inexact independent set: " + optimalISAnswer.length);
         System.out.println("-------------------------------------------");
 
         System.out.println("----------Inexact Independent Set----------");
@@ -252,9 +254,3 @@ public class GraphToolBox {
     }
 
 }
-
-
-
-
-
-
