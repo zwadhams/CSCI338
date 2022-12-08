@@ -7,7 +7,10 @@ import java.util.Arrays;
  *
  * @author yaw
  */
+
+//Zach Wadhams, Kai Dockens, Zach Snyder
 public class GraphToolBox {
+
 
     //function to determine if a graph (minus some vertices specified in listOfIgnoredVertices) is a vertex cover
     public static boolean isVC(int[][] originGraph, ArrayList<Integer> listOfIgnoredVertices) {
