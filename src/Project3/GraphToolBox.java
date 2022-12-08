@@ -98,7 +98,6 @@ public class GraphToolBox {
 
         int[] arr = ALvertexVC.stream().mapToInt(i -> i).toArray();
 
-
         long endTime = System.nanoTime();
         System.out.println("Took this long: " + (endTime-startTime));
         return arr;
