@@ -71,26 +71,11 @@ public class GraphToolBox {
 
     // return an array containing the vertex numbers of an optimal VC.
     public static int[] exactVC(Graph inputGraph) {
-
-        return null;
-    }
-
-    // return (in polynomial time) an array containing the vertex numbers of a VC.
-    public static int[] inexactVC(Graph inputGraph) {
-
+        long startTime = System.nanoTime();
 
         int[][] originalGraph = inputGraph.getGraph(); //adjacency matrix
 
         ArrayList<Integer> listOfIgnoredVertices = new ArrayList<Integer>();
-
-        //simple testing
-        /*listOfIgnoredVertices.add(0);
-        listOfIgnoredVertices.add(3);
-        System.out.println("Ignored vertices: " + listOfIgnoredVertices);
-        boolean testVC = isVC(originalGraph, listOfIgnoredVertices);
-        System.out.println("Is the test a vc?" + testVC);
-        listOfIgnoredVertices.clear();
-         */
 
         //gets smallest vertex cover by removing node 1 and so forth until it is not a vertex cover
         int brokeOn = 0;
@@ -113,6 +98,45 @@ public class GraphToolBox {
 
         int[] arr = ALvertexVC.stream().mapToInt(i -> i).toArray();
 
+
+        long endTime = System.nanoTime();
+        System.out.println("Took this long: " + (endTime-startTime));
+        return arr;
+    }
+
+    // return (in polynomial time) an array containing the vertex numbers of a VC.
+    public static int[] inexactVC(Graph inputGraph) {
+
+        long startTime = System.nanoTime();
+
+        int[][] originalGraph = inputGraph.getGraph(); //adjacency matrix
+
+        ArrayList<Integer> listOfIgnoredVertices = new ArrayList<Integer>();
+
+        //gets smallest vertex cover by removing node 1 and so forth until it is not a vertex cover
+        int brokeOn = 0;
+        for (int i = 0; i < originalGraph.length; i++) {
+            listOfIgnoredVertices.add(i);
+            boolean isVertexCover = isVC(originalGraph, listOfIgnoredVertices);
+            if (!isVertexCover) {
+                brokeOn = i;
+                break;
+            }
+        }
+
+        ArrayList<Integer> ALvertexVC = new ArrayList<Integer>();
+
+        for (int i = 0; i < originalGraph.length; i++) {
+            if (!listOfIgnoredVertices.contains(i) || i == brokeOn) {
+                ALvertexVC.add(i);
+            }
+        }
+
+        int[] arr = ALvertexVC.stream().mapToInt(i -> i).toArray();
+
+
+        long endTime = System.nanoTime();
+        System.out.println("Took this long: " + (endTime-startTime));
         return arr;
     }
 
@@ -133,17 +157,6 @@ public class GraphToolBox {
         int[][] originalGraph = inputGraph.getGraph(); //adjacency matrix
 
         ArrayList<Integer> listOfIgnoredVertices = new ArrayList<Integer>();
-
-        //simple testing
-        /*listOfIgnoredVertices.add(0);
-        listOfIgnoredVertices.add(2);
-        listOfIgnoredVertices.add(3);
-        listOfIgnoredVertices.add(4);
-        System.out.println("Ignored vertices: " + listOfIgnoredVertices);
-        boolean testIS = isIS(originalGraph, listOfIgnoredVertices);
-        System.out.println("Is the test a IS?" + testIS);
-        listOfIgnoredVertices.clear();
-         */
 
         //fill our ignoredVertices
         for (int i = 0; i < originalGraph.length; i++) {
@@ -179,9 +192,10 @@ public class GraphToolBox {
     public static void main(String[] args) {
 
         //simple testing
-        /*Graph simpleGraph = new Graph("simple.txt");
+        Graph simpleGraph = new Graph("simple.txt");
+        Graph simple10 = new Graph("simple10.txt");
 
-        System.out.println("Simple graph testing");
+        /*System.out.println("Simple graph testing");
         System.out.println("---vertex simple---");
         int [] simpleVC = inexactVC(simpleGraph);
         System.out.println(Arrays.toString(simpleVC));
@@ -194,11 +208,14 @@ public class GraphToolBox {
         Graph graph1 = new Graph("graph1.txt");
 
         System.out.println("------------Exact Vertex Cover------------");
-        //To be implemented
+        int[] exactVCAnswer = exactVC(simple10);
+        System.out.println("List of vertices in vertex cover:");
+        System.out.println(Arrays.toString(exactVCAnswer));
+        System.out.println("Number of vertices in the inexact vertex cover: " + exactVCAnswer.length);
         System.out.println("-------------------------------------------");
 
         System.out.println("------------Inexact Vertex Cover------------");
-        int[] inexactVCAnswer = inexactVC(graph1);
+        int[] inexactVCAnswer = inexactVC(simple10);
         System.out.println("List of vertices in vertex cover:");
         System.out.println(Arrays.toString(inexactVCAnswer));
         System.out.println("Number of vertices in the inexact vertex cover: " + inexactVCAnswer.length);
@@ -206,12 +223,12 @@ public class GraphToolBox {
 
         System.out.println("----------Optimal Independent Set----------");
         //To be implemented
-        int[] optimalISAnswer = inexactVC(graph1);
+        int[] optimalISAnswer = inexactVC(simpleGraph);
         System.out.println(Arrays.toString(optimalISAnswer));
         System.out.println("-------------------------------------------");
 
         System.out.println("----------Inexact Independent Set----------");
-        int[] inexactISAnswer = inexactIS(graph1);
+        int[] inexactISAnswer = inexactIS(simpleGraph);
         System.out.println("List of vertices in independent set:");
         System.out.println(Arrays.toString(inexactISAnswer));
         System.out.println("Number of vertices in the inexact independent set: " + inexactISAnswer.length);
